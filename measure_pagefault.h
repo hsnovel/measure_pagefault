@@ -2,6 +2,7 @@
 #define MEASURE_PAGEFAULT_
 
 #include <stddef.h>
+#include <linux/perf_event.h>
 
 struct page_fault_ctx
 {
@@ -23,7 +24,6 @@ size_t end_pagefault_counter(struct page_fault_ctx *ctx);
 #include <sys/resource.h>
 #include <sys/ioctl.h>
 
-#include <linux/perf_event.h>    /* Definition of PERF_* constants */
 #include <linux/hw_breakpoint.h> /* Definition of HW_* constants */
 #include <sys/syscall.h>         /* Definition of SYS_* constants */
 #include <unistd.h>
