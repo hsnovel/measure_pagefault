@@ -9,6 +9,8 @@ To start the pagefault counter use `start_pagefault_counter();` The function ret
 
 To end the counter call `end_pagefault_counter()` passing the previously returned `struct page_fault_ctx`, the function returns `size_t` which tells the number of page faults that occoured.
 
+Number of page faults can also be obtained with `get_pagefault_counter()` function, which does not terminate the counter unlike `end_pagefault_counter()`
+
 An example usage is inside `example.c`, which can be compiled with running `./build_debug.sh`, which generates `example` binary which you can run to test the program.
 
 ### NOTE
