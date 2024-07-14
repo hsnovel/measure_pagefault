@@ -2,6 +2,14 @@
 #define MEASURE_PAGEFAULT_
 
 #include <stddef.h>
+
+struct page_fault_ctx
+{
+	int page_fault_fd;
+	int failed;
+	struct perf_event_attr page_fault_attr;
+};
+
 struct page_fault_ctx start_pagefault_counter();
 size_t end_pagefault_counter(struct page_fault_ctx *ctx);
 
@@ -20,13 +28,6 @@ size_t end_pagefault_counter(struct page_fault_ctx *ctx);
 #include <sys/syscall.h>         /* Definition of SYS_* constants */
 #include <unistd.h>
 #include <string.h>
-
-struct page_fault_ctx
-{
-	int page_fault_fd;
-	int failed;
-	struct perf_event_attr page_fault_attr;
-};
 
 // The error can be printed with strerror(errno) if the function
 // returns -1
