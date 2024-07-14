@@ -54,6 +54,13 @@ struct page_fault_ctx start_pagefault_counter()
 	return ctx;
 }
 
+size_t get_pagefault_counter(struct page_fault_ctx *ctx)
+{
+	size_t page_faults_count;
+	read(ctx->page_fault_fd, &page_faults_count, sizeof(page_faults_count));
+	return page_faults_count;
+}
+
 size_t end_pagefault_counter(struct page_fault_ctx *ctx)
 {
 	ioctl(ctx->page_fault_fd, PERF_EVENT_IOC_DISABLE, 0);

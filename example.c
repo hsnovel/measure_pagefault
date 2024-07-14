@@ -14,6 +14,11 @@ int main()
 
 	for (int i = 0; i < size / sizeof(int); i++)
 	{
+		if (i % (4096) == 0)
+		{
+			size_t num_faults = get_pagefault_counter(&ctx);
+			printf("num_faults: %zu\n", num_faults);
+		}
 		data[i] = 0;
 	}
 
