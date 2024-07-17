@@ -1,6 +1,6 @@
-#define MESAURE_PAGEFAULT_IMPLEMENTATION
 #include "measure_pagefault.h"
 
+#define _GNU_SOURCE
 #include <sys/mman.h>
 #include <stdio.h>
 
@@ -19,10 +19,12 @@ int main()
 	size_t size = 4096 * 32 * 4;
 	int *data = mmap(0, size, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0);
 
-	struct page_fault_ctx ctx = start_pagefault_counter();
+	struct page_fault_ctx ctx = start_pagefault_counter(MEASURE_HARD_FAULTS|MEASURE_SOFT_FAULTS);
 	write_zero(data, size);
-	size_t page_faults_count = end_pagefault_counter(&ctx);
-	printf("Page fault count without prefaulting: %zu\n", page_faults_count);
+	struct page_fault_result result = end_pagefault_counter(&ctx);
+	printf("Page fault count without prefaulting: %zu\n", result.soft_fault_count + result.hard_fault_count);
+	printf("\tSoft faults: %zu\n", result.soft_fault_count);
+	printf("\tHard faults: %zu\n", result.hard_fault_count);
 
 	//////////////////////////
 	// WITH PREFAULTING
@@ -39,8 +41,10 @@ int main()
 	// Normally this should print 0 but due to COW the page fault number may vary.
 	ctx = start_pagefault_counter();
 	write_zero(data, size);
-	page_faults_count = end_pagefault_counter(&ctx);
-	printf("Page fault count with prefaulting: %zu\n", page_faults_count);
+	result = end_pagefault_counter(&ctx);
+	printf("Page fault count with prefaulting: %zu\n", result.soft_fault_count + result.hard_fault_count);
+	printf("\tSoft faults: %zu\n", result.soft_fault_count);
+	printf("\tHard faults: %zu\n", result.hard_fault_count);
 
 	return 0;
 }
