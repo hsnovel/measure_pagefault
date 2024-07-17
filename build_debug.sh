@@ -1,2 +1,2 @@
 #!/bin/bash
-gcc example.c measure_pagefault.c -std=c99 -o example
+gcc example.c example_include.c -std=c99 -o example
