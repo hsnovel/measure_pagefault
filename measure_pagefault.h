@@ -12,6 +12,7 @@ struct page_fault_ctx
 };
 
 struct page_fault_ctx start_pagefault_counter();
+size_t get_pagefault_counter(struct page_fault_ctx *ctx);
 size_t end_pagefault_counter(struct page_fault_ctx *ctx);
 
 /******************/
