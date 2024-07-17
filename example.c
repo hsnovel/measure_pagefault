@@ -39,7 +39,7 @@ int main()
 	}
 
 	// Normally this should print 0 but due to COW the page fault number may vary.
-	ctx = start_pagefault_counter();
+	ctx = start_pagefault_counter(MEASURE_SOFT_FAULTS|MEASURE_HARD_FAULTS);
 	write_zero(data, size);
 	result = end_pagefault_counter(&ctx);
 	printf("Page fault count with prefaulting: %zu\n", result.soft_fault_count + result.hard_fault_count);
