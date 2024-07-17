@@ -15,8 +15,10 @@ counter, the variable `failed` inside `page_fault_ctx` is set to 1 if there was 
 can be printed with `strerror(errno)`(not always, if the flags are not valid errno would not be set). Do not forget to store the errno
 before doing any operation that can alter errno!
 
-To end the counter call `end_pagefault_counter()` passing the previously returned `struct page_fault_ctx`, the function returns `size_t`
-which tells the number of page faults that occoured.
+To end the counter call `end_pagefault_counter()` passing the previously returned `struct page_fault_ctx`, the function returns
+`struct page_fault_result` which contains `soft_fault_count` and `hard_fault_count`. If you did not specify a flag and read how
+many faults occoured from that flag you will not get an accurate result! So if you only pass `MEASURE_HARD_FAULTS` and try
+to read `soft_fault_count` you will not get an accurate result! Those values will always be set to 0 if you did not specify the flag.
 
 Number of page faults can also be obtained with `get_pagefault_counter()` function, which does not terminate the counter unlike `end_pagefault_counter()`
 
