@@ -57,7 +57,7 @@ struct page_fault_ctx start_pagefault_counter(enum page_fault_measure_flags flag
 	memset(&ctx, 0, sizeof(struct page_fault_ctx));
 	ctx.flags = flags;
 
-	if(flags & MEASURE_SOFT_FAULTS)
+	if (flags & MEASURE_SOFT_FAULTS)
 	{
 		ctx.soft_attr.config = PERF_COUNT_SW_PAGE_FAULTS_MIN;
 		ctx.soft_attr.size = sizeof(ctx.soft_attr);
@@ -71,11 +71,17 @@ struct page_fault_ctx start_pagefault_counter(enum page_fault_measure_flags flag
 			return ctx;
 		}
 
-		ioctl(ctx.soft_fd, PERF_EVENT_IOC_RESET, 0);
-		ioctl(ctx.soft_fd, PERF_EVENT_IOC_ENABLE, 0);
+		if (ioctl(ctx.soft_fd, PERF_EVENT_IOC_RESET, 0) == -1) {
+			return ctx;
+		}
+
+		if (ioctl(ctx.soft_fd, PERF_EVENT_IOC_ENABLE, 0) == -1) {
+			ctx.failed = 1;
+			return ctx;
+		}
 	}
 
-	if(flags & MEASURE_HARD_FAULTS)
+	if (flags & MEASURE_HARD_FAULTS)
 	{
 		ctx.hard_attr.config = PERF_COUNT_SW_PAGE_FAULTS_MAJ;
 		ctx.hard_attr.size = sizeof(ctx.hard_attr);
