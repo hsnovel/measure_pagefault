@@ -1,5 +1,5 @@
 #ifndef MEASURE_PAGEFAULT_H
-#define MEASURE_PAGEFAULT_
+#define MEASURE_PAGEFAULT_H
 
 #include <stddef.h>
 #include <linux/perf_event.h>
@@ -10,8 +10,6 @@ enum page_fault_measure_flags
 	MEASURE_SOFT_FAULTS = 0x2,
 };
 
-// If both flags are used soft flag is used to capture
-// both instead of having two different reads.
 struct page_fault_ctx
 {
 	int soft_fd;
